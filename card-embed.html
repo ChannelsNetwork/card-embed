@@ -1,0 +1,98 @@
+<link rel="import" href="../polymer/polymer-element.html">
+<link rel="import" href="../soso-text-input/soso-text-input.html">
+
+<dom-module id="card-embed-composer">
+  <template>
+    <style>
+      soso-text-input {
+        font-size: 15px;
+        margin: 15px;
+      }
+    </style>
+    <div>
+      <soso-text-input id="input" label="Enter embed URL" placeholder="Enter embed URL" on-input="_onInput"></soso-text-input>
+    </div>
+  </template>
+  <script>
+    class CardEmbedComposer extends Polymer.Element {
+      static get is() { return 'card-embed-composer'; }
+      static get properties() {
+        return {
+          services: Object,
+          author: Object
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+        this._ready = false;
+      }
+
+      get isReady() {
+        return this._ready;
+      }
+
+      get summary() {
+        return {
+          imageURL: null,
+          title: "Let's Play!",
+          text: null
+        };
+      }
+
+      get sharedState() {
+        return {
+          properties: {
+            embedUrl: this.$.input.value.trim()
+          },
+          collections: {}
+        }
+      }
+
+      _onInput() {
+        const ready = /^https?\:\/\/\S+$/.test(this.$.input.value.trim());
+        if (this._ready !== ready) {
+          this._ready = ready;
+          this.dispatchEvent(new CustomEvent('state-ready-change', { bubbles: true, composed: true, detail: { ready: ready } }));
+        }
+      }
+    }
+    window.customElements.define(CardEmbedComposer.is, CardEmbedComposer);
+  </script>
+</dom-module>
+
+<dom-module id="card-embed-viewer">
+  <template>
+    <style>
+      .container {
+        height: 100%;
+        position: relative;
+      }
+
+      iframe {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <div class="container">
+      <iframe src="[[sharedState.properties.embedUrl]]" scrolling="none" frameborder="0"></iframe>
+    </div>
+  </template>
+  <script>
+    class CardEmbedViewer extends Polymer.Element {
+      static get is() { return 'card-embed-viewer'; }
+      static get properties() {
+        return {
+          sharedState: Object,
+          author: Object,
+          user: Object
+        };
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+    }
+    window.customElements.define(CardEmbedViewer.is, CardEmbedViewer);
+  </script>
+</dom-module>
