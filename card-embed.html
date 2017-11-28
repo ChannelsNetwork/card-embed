@@ -89,18 +89,18 @@
       }
 
       .container {
-        position: absolute;
-        top: 0;
+        position: fixed;
+        top: 60px;
         left: 0;
         right: 0;
         bottom: 0;
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
       }
 
       iframe {
+        display: block;
         width: 100%;
+        box-sizing: border-box;
         height: 100%;
       }
     </style>
