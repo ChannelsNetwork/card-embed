@@ -33,6 +33,7 @@
       static get properties() {
         return {
           services: Object,
+          initialState: Object,
           author: Object
         };
       }
@@ -40,6 +41,13 @@
       connectedCallback() {
         super.connectedCallback();
         this._ready = false;
+        if (this.initialState && this.initialState.shared && this.initialState.shared.properties) {
+          let embedUrl = this.initialState.shared.properties.embedUrl;
+          if (embedUrl) {
+            this.$.input.value = embedUrl;
+            this._onInput();
+          }
+        }
       }
 
       get isReady() {
