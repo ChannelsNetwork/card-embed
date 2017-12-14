@@ -17,6 +17,10 @@
         --soso-label-size: 90%;
         --soso-valid-color: #2E7D32;
       }
+
+      #invalidUrl {
+        color: red;
+      }
     </style>
     <div class="container">
       <h2>Embed a webpage in this card</h2>
@@ -26,8 +30,9 @@
       <p>Test that the page works well on all devices and browsers.</p>
       <p>
         <b>Important:</b>
-        Do not use a webpage unless you own its content or have explicit permission to use it for this purpose.</p>
-      <soso-text-input id="input" label="Enter webpage URL" placeholder="Enter webpage URL" on-input="_onInput"></soso-text-input>
+        Do not use a webpage unless you own its content or have permission to use it for this purpose.</p>
+      <soso-text-input id="input" label="Enter https webpage URL" placeholder="Enter https webpage URL" on-input="_onInput"></soso-text-input>
+      <div id="invalidUrl" style="display:none;">Invalid URL: Only secure webpages are supported (https://...).</div>
     </div>
   </template>
   <script>
@@ -75,7 +80,9 @@
       }
 
       _onInput() {
-        const ready = /^https?\:\/\/\S+$/.test(this.$.input.value.trim());
+        const ready = /^https\:\/\/\S+$/.test(this.$.input.value.trim());
+        const http = /^http:\/\//.test(this.$.input.value.trim());
+        this.$.invalidUrl.style.display = http ? "" : "none";
         if (this._ready !== ready) {
           this._ready = ready;
           this.dispatchEvent(new CustomEvent('state-ready-change', { bubbles: true, composed: true, detail: { ready: ready } }));
