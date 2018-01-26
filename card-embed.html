@@ -108,7 +108,7 @@
         const http = /^http:\/\//.test(this.$.input.value.trim());
         if (http) {
           this.$.errorMessage.innerText = "Invalid URL: Only secure webpages are supported (https://...).";
-          this._ready = false;
+          ready = false;
         } else {
           this.$.errorMessage.innerText = '';
         }
